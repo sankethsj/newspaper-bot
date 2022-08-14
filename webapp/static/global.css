@@ -7,16 +7,20 @@ body{
     width: 100vw;
     height: 100vh;
     font-family: 'Poppins', sans-serif;
-    padding: 2rem;
+    padding: 20px;
 }
 nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: max-content;
-    margin: 2rem;
+    margin-bottom: 2rem;
 }
 
 .title{
-    font-size: 2rem;
+    cursor: pointer;
+    font-size: 28px;
     text-align: center;
 }
 
@@ -28,10 +32,10 @@ nav{
     align-items: center;
 }
 h4 {
-    margin-top: 1rem;
+    margin-top: 20px;
 }
 .list-regions, .list-dates{
-    margin-top: 2rem;
+    margin-top: 40px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -48,17 +52,22 @@ h4 {
 
 .region{
     font-size: 1.5rem;
-    margin: 2rem;
-    padding: 1rem;
+    margin: 20px;
+    padding: 10px;
     border: 2px solid black;
-    border-radius: 1rem;
+    border-radius: 10px;
 }
 
 .date{
-    margin: 2rem;
+    margin: 20px;
     color: rgb(249, 252, 255);
-    background-color: rgb(0, 80, 0);
-    padding: 1rem;
+    background-color: rgb(19, 105, 19);
+    padding: 10px;
     border: 2px solid black;
-    border-radius: 1rem;
+    border-radius: 10px;
+}
+
+a{
+    text-decoration: none;
+    font-weight: 500;
 }
