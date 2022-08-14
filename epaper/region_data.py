@@ -17,11 +17,7 @@ class Region(object):
 
     def get_availabe_regions(self):
 
-        data = [
-            region 
-            for region, region_data in self.data.items() 
-            if region_data.get('paper_code')
-        ]
+        data = [region for region in self.data]
 
         return data
 
@@ -30,12 +26,14 @@ class Region(object):
         return self.data.get(region)
         
 
-    def set_region_info(self, region, paper_code):
+    def set_region_info(self, region, paper_code, date=None):
 
         if self.data.get(region) is None:
             return False
 
-        date = dt.datetime.now().strftime("%d-%m-%Y")
+        if date is None:
+            date = dt.datetime.now().strftime("%d-%m-%Y")
+            
         self.data[region]["paper_code"][date] = paper_code
 
         with open(PATH_TO_DATA, "w") as fo:

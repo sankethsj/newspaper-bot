@@ -40,6 +40,16 @@ def fetch_e_paper_code(region, date:str = None):
     paper_code = regions_data.get_paper_code(region, todays_date)
 
     if paper_code is None:
+
+        todays_date = dt.datetime.now().strftime("%d-%m-%Y")
+
+        if date != todays_date:
+            
+            return {
+                'status': False,
+                'message': f"Cannot fetch e-paper for date : {date}"
+            }
+
         # ping homepage to get paper codes
         response = requests.get(E_PAPER_URL)
 
@@ -59,7 +69,7 @@ def fetch_e_paper_code(region, date:str = None):
         link_to_paper = header_element.getparent().getparent().get('href')
         paper_code = link_to_paper.split("/")[-1]
 
-        regions_data.set_region_info(region, paper_code)
+        regions_data.set_region_info(region, paper_code, todays_date)
 
     return {
         'status': True,
