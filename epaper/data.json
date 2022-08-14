@@ -1,0 +1,14 @@
+{
+    "Bengaluru": {
+        "paper_code": {
+            "14-08-2022": "3562700"
+        },
+        "region_code": 12222
+    },
+    "Mangaluru": {
+        "paper_code": {
+            "14-08-2022": "3562311"
+        },
+        "region_code": 20312
+    }
+}
