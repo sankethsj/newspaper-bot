@@ -1,5 +1,4 @@
 requests
 lxml
 flask
-flask-sqlalchemy
 gunicorn
