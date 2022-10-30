@@ -10,4 +10,7 @@ Download Kannada Prabha newspaper from : https://kpepaper.asianetnews.com/
 Usage :
 
 1. Install dependencies
-> pip install -r r
+> pip install -r requirements.txt
+
+2. Run the flask app
+> python app.py
