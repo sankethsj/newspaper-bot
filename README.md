@@ -2,7 +2,7 @@
 Download Kannada Prabha newspaper from : https://kpepaper.asianetnews.com/
 
 - Simple UI
-- Reduced number of clicks
+- Reduced number of clicks to download
 - Bypass Captcha verification
 
 ---
