@@ -1,0 +1,37 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: E-paper bot
+
+on:
+  schedule:
+    - cron:  "0 1 * * *"
+
+permissions:
+  contents: read-all|write-all
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Download e-paper
+      run: |
+        python bot.py
+    - name: Commit & Push e-paper
+      run: |
+        git config --global user.name "sankethsj"
+        git config --global user.email "sankethjain81@gmail.com"
+        git add .
+        git commit -m "added e-paper"
+        git push
