@@ -46,7 +46,7 @@ def export_to_single_df(issue_id, date_string):
     
     merger = PdfWriter()
     
-    for pdf in os.listdir("tmp"):
+    for pdf in sorted(os.listdir("tmp")):
         merger.append("tmp/" + pdf)
 
     out_filename = f"output/{issue_id}_{date_string}.pdf"
