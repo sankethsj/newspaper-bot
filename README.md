@@ -1,9 +1,11 @@
 # E-Paper bot
-Download Kannada Prabha newspaper from : https://kpepaper.asianetnews.com/
+Download Kannada Prabha newspaper from source : https://kpepaper.asianetnews.com/
 
 - Simple UI
 - Reduced number of clicks to download
 - Bypass Captcha verification
+
+Website : https://paper-wc21.onrender.com/
 
 ---
 
