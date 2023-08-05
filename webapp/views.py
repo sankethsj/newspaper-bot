@@ -1,49 +1,47 @@
-import datetime as dt
-
-import epaper
-from flask import Blueprint, jsonify, redirect, render_template
+import requests
+from flask import Blueprint, redirect, render_template
 
 views = Blueprint('views', __name__)
 
-region_info = {
-    "Mangaluru": "20312",
-    "Bengaluru": "12222"
-}
+
+def get_papers_list():
+
+    URL= "https://api.github.com/repos/sankethsj/newspaper-bot/contents/output"
+    response = requests.get(URL)
+
+    papers = []
+    if response.status_code == 200:
+        papers = response.json()
+
+    return papers
 
 
 @views.route('/', methods=['GET'])
 def home():
 
-    regions = ['Mangaluru', 'Bengaluru']
-    print("Fetch regions :", regions)
+    papers = get_papers_list()
+    
+    for paper in papers:
+        paper["title"] = "Kannada Prabha"
+        paper["region"] = "Mangaluru"
+        date_string = paper["name"].split(".")[0].split("_")[-1]
+        yyyy = date_string[:4]
+        mm = date_string[4:6]
+        dd = date_string[6:8]
+        paper["date"] = f"{dd}-{mm}-{yyyy}"
+        paper["size"] = round(paper["size"]/1000000, 2)
 
-    return render_template("home.html", regions=regions)
+    return render_template("home.html", papers=papers)
 
 
-@views.route('/<string:region>/<string:date>', methods=['GET'])
-def download_paper(region:str, date:str):
+@views.route('/download/<string:sha>', methods=['GET'])
+def download_paper(sha:str):
 
-    if date == "today":
-        date = dt.datetime.now().strftime("%d-%m-%Y")
+    papers = get_papers_list()
 
-    try:
-        dt.datetime.strptime(date, "%d-%m-%Y")
-    except:
-        print(f"Wrong date format : {date}")
-        return redirect(f'/{region}')
+    for paper in papers:
 
-    paper_info = epaper.fetch_todays_paper_code(region)
+        if paper["sha"] == sha:
+            return redirect(paper["download_url"])
 
-    if not paper_info['status']:
-        return jsonify(paper_info)
-
-    paper_code = paper_info.get('paper_code')
-
-    region_code = region_info.get(region)
-
-    pdf_info = epaper.fetch_e_paper_pdf_link(region_code, paper_code)
-
-    if pdf_info['status']:
-        return redirect(pdf_info['pdf_link'])
-
-    return jsonify(pdf_info)
+    return render_template("download_error.html")

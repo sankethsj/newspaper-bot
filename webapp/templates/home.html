@@ -8,13 +8,16 @@
 
     <h2>Download e-papers</h2>
 
-    <h4>Available regions :</h4>
+    <ul class="list-papers">
 
-    <ul class="list-regions">
-        {% for region in regions %}
+        {% for paper in papers %}
         <li>
-            <a class="region" href="{{ region }}/today">Today's {{ region }} paper</a>
+            <h2>Date : {{ paper["date"] }}</h2>
+            <h3>{{ paper["region"] }} region</h3>
+            <a class="my-button" href="download/{{ paper["sha"] }}">Download ({{ paper["size"] }} MB)</a>
         </li>
+        {% else %}
+            <h2>Papers not Available!</h2>
         {% endfor %}
     </ul>
 
