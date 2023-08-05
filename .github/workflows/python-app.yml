@@ -4,8 +4,10 @@
 name: E-paper bot
 
 on:
-  schedule:
-    - cron:  "0 1 * * *"
+  workflow_dispatch
+  # schedule:
+  #   - cron:  "0 1 * * *"
+  
 
 permissions:
   contents: read-all|write-all
