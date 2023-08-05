@@ -10,7 +10,7 @@ on:
   
 
 permissions:
-  contents: read-all|write-all
+  contents: write
 
 jobs:
   build:
