@@ -20,6 +20,9 @@ def get_papers_list():
 def home():
 
     papers = get_papers_list()
+
+    if papers:
+        papers = sorted(papers, key=lambda x: x["path"], reverse=True)
     
     for paper in papers:
         paper["title"] = "Kannada Prabha"
