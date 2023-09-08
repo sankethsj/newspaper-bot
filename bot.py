@@ -57,7 +57,8 @@ def export_to_single_df(issue_id, date_string):
 
 if __name__ == "__main__":
 
-    date_string = dt.datetime.strftime(dt.datetime.now(), "%Y%m%d")
+    current_time = dt.datetime.now()
+    date_string = dt.datetime.strftime(current_time, "%Y%m%d")
     ISSUE_ID = "KANPRABHA_MN"
 
     print(f"Downloading '{ISSUE_ID}' of date : {date_string}")
@@ -88,3 +89,14 @@ if __name__ == "__main__":
     print("Cleaning 'tmp' folder")
     shutil.rmtree("tmp")
     print("Complete")
+
+    # delete pdf files older than 7 days
+    for file in os.listdir('output'):
+
+        file_date_str = file.split("_")[-1].split(".")[0]
+        file_date = dt.datetime.strptime(file_date_str, "%Y%m%d")
+
+        if (current_time - file_date).days > 7:
+            print(f"Deleting File '{file}' older than 7 days")
+            os.remove('output/' + file)
+
