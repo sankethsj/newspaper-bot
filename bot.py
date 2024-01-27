@@ -57,7 +57,9 @@ def export_to_single_df(issue_id, date_string):
 
 if __name__ == "__main__":
 
-    current_time = dt.datetime.now()
+    current_time = dt.datetime.utcnow() + dt.timedelta(hours=5, minutes=30)
+    print("Current India time :",current_time)
+
     date_string = dt.datetime.strftime(current_time, "%Y%m%d")
     ISSUE_ID = "KANPRABHA_MN"
 

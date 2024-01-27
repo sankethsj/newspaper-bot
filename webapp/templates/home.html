@@ -14,7 +14,7 @@
         <li>
             <h2>Date : {{ paper["date"] }}</h2>
             <h3>{{ paper["region"] }} region</h3>
-            <a class="my-button" href="download/{{ paper["sha"] }}">Download ({{ paper["size"] }} MB)</a>
+            <a class="my-button" href="download/{{ paper['sha'] }}">Download ({{ paper["size"] }} MB)</a>
         </li>
         {% else %}
             <h2>Papers not Available!</h2>

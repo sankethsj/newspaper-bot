@@ -4,23 +4,14 @@
     box-sizing: border-box;
 }
 body{
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
     font-family: 'Poppins', sans-serif;
-    padding: 20px;
     color: rgb(180, 180, 180);
     background-color: rgb(10, 10, 10);
 }
-nav{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: max-content;
-    margin-bottom: 2rem;
-}
 
 .title{
+    margin: 20px 0;
     cursor: pointer;
     font-size: 28px;
     text-align: center;
@@ -39,21 +30,17 @@ nav{
     text-align: center;
 }
 
-h4 {
-    margin-top: 20px;
-}
 .list-papers{
-    margin-top: 20px;
-    width: 100%;
-    height: 400px;
-    padding: 1rem;
+    margin: 20px 0;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
 }
 
 li{
+    width: 250px;
+    height: 170px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,6 +64,7 @@ li:hover{
     background-color: rgb(253, 222, 184);
     color: black;
     margin: 20px;
+    font-size: 14px;
 }
 
 .my-button:hover{
