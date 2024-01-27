@@ -6,7 +6,8 @@ name: E-paper bot
 on:
   # workflow_dispatch
   schedule:
-    - cron:  "0 0 * * *"
+    - cron:  "0 22 * * *"
+    # runs at 22:00 UTC -> 3.30 AM IST
   
 
 permissions:
