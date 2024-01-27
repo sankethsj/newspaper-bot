@@ -18,20 +18,20 @@ def get_papers_list():
 
 @views.route("/", methods=["GET"])
 def home():
-    papers = get_papers_list()
+    # papers = get_papers_list()
 
-    if papers:
-        papers = sorted(papers, key=lambda x: x["path"], reverse=True)
+    # if papers:
+    #     papers = sorted(papers, key=lambda x: x["path"], reverse=True)
 
-    for paper in papers:
-        paper["title"] = "Kannada Prabha"
-        paper["region"] = "Mangaluru"
-        # sample paper name : KANPRABHA_MN_20240120.pdf
-        date_string = paper["name"].split(".")[0].split("_")[-1]
-        paper["date"] = dt.datetime.strptime(date_string, "%Y%m%d").strftime("%d-%m-%Y")
-        paper["size"] = round(paper["size"] / 1000000, 2)
+    # for paper in papers:
+    #     paper["title"] = "Kannada Prabha"
+    #     paper["region"] = "Mangaluru"
+    #     # sample paper name : KANPRABHA_MN_20240120.pdf
+    #     date_string = paper["name"].split(".")[0].split("_")[-1]
+    #     paper["date"] = dt.datetime.strptime(date_string, "%Y%m%d").strftime("%d-%m-%Y")
+    #     paper["size"] = round(paper["size"] / 1000000, 2)
 
-    return render_template("home.html", papers=papers)
+    return render_template("home.html", papers=[])
 
 
 @views.route("/download/<string:sha>", methods=["GET"])
