@@ -8,7 +8,7 @@ from functools import partial
 from multiprocessing.dummy import Pool as ThreadPool
 
 import requests
-from PyPDF2 import PdfWriter
+from pypdf import PdfWriter
 
 
 def get_page_count(issue_id, date_string):
