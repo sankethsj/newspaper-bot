@@ -31,10 +31,11 @@ jobs:
     - name: Download e-paper
       run: |
         python bot.py
-    - name: Commit & Push e-paper
+    - name: Pull, Commit & Push e-paper
       run: |
         git config --global user.name "sankethsj"
         git config --global user.email "sankethjain81@gmail.com"
+        git pull
         git add .
         git commit -m "added e-paper"
         git push
