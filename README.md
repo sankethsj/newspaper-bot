@@ -7,7 +7,7 @@ Download Kannada Prabha newspaper from source : https://kpepaper.asianetnews.com
 
 [![E-paper bot](https://github.com/sankethsj/newspaper-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/sankethsj/newspaper-bot/actions/workflows/python-app.yml)
 
-Website : https://paper-wc21.onrender.com/
+Website : https://sankethsj.github.io/epaper/
 
 ---
 
