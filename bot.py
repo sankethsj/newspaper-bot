@@ -69,34 +69,45 @@ if __name__ == "__main__":
     date_string = dt.datetime.strftime(current_time, "%Y%m%d")
     ISSUE_ID = "KANPRABHA_MN"
 
-    print(f"Downloading '{ISSUE_ID}' of date : {date_string}")
+    # check if paper already downloaded or exists
+    paper_exists = False
+    for file in os.listdir("output"):
+        file_date_str = file.split("_")[-1].split(".")[0]
+        if date_string == file_date_str:
+            print(f"Paper for date {date_string} already exists")
+            paper_exists = True
+            break
 
-    page_count = get_page_count(ISSUE_ID, date_string)
-    print("No. of pages :", page_count)
+    if not paper_exists:
 
-    os.makedirs("tmp", exist_ok=True)
-    os.makedirs("output", exist_ok=True)
+        print(f"Downloading '{ISSUE_ID}' of date : {date_string}")
 
-    pages = []
-    for i in range(1, page_count + 1):
-        pages.append(i)
+        page_count = get_page_count(ISSUE_ID, date_string)
+        print("No. of pages :", page_count)
 
-    print("Downloading all pages...")
-    # Make the Pool of workers
-    pool = ThreadPool(8)
+        os.makedirs("tmp", exist_ok=True)
+        os.makedirs("output", exist_ok=True)
 
-    func = partial(download_pdf, ISSUE_ID, date_string)
-    pool.map(func, pages)
-    pool.close()
-    pool.join()
+        pages = []
+        for i in range(1, page_count + 1):
+            pages.append(i)
 
-    print("Download complete")
+        print("Downloading all pages...")
+        # Make the Pool of workers
+        pool = ThreadPool(8)
 
-    export_to_single_df(ISSUE_ID, date_string)
+        func = partial(download_pdf, ISSUE_ID, date_string)
+        pool.map(func, pages)
+        pool.close()
+        pool.join()
 
-    print("Cleaning 'tmp' folder")
-    shutil.rmtree("tmp")
-    print("Complete")
+        print("Download complete")
+
+        export_to_single_df(ISSUE_ID, date_string)
+
+        print("Cleaning 'tmp' folder")
+        shutil.rmtree("tmp")
+        print("Complete")
 
     # delete pdf files older than 7 days
     for file in os.listdir("output"):
@@ -104,6 +115,6 @@ if __name__ == "__main__":
         file_date_str = file.split("_")[-1].split(".")[0]
         file_date = dt.datetime.strptime(file_date_str, "%Y%m%d")
 
-        if (current_time - file_date).days > 7:
+        if (current_time.replace(tzinfo=None) - file_date).days > 7:
             print(f"Deleting File '{file}' older than 7 days")
             os.remove("output/" + file)
