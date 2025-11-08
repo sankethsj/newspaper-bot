@@ -1,75 +1,56 @@
 # E-Paper Bot
 
-E-Paper Bot is a tool designed to automate the process of downloading the Kannada Prabha newspaper from the official source: [Kannada Prabha E-Paper](https://kpepaper.asianetnews.com/). It features a simple and user-friendly interface, minimizes user interactions, and bypasses CAPTCHA verification for a smoother experience.
+A tool designed to automate downloading of Kannada e-papers from official sources:
 
-## Features
+- [Kannada Prabha E-Paper](https://kpepaper.asianetnews.com/)
+- [Vishwavani E-Paper](https://epaper.vishwavani.news/)
 
-- **Simple UI**: Easy to use with minimal interaction required.
-- **Reduced Clicks**: Streamlines the download process with fewer steps.
-- **Captcha Bypass**: Automatically bypasses CAPTCHA verification for effortless access.
+Features a simple web interface for accessing downloaded papers and automated daily downloads via GitHub Actions.
 
 [![E-paper bot](https://github.com/sankethsj/newspaper-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/sankethsj/newspaper-bot/actions/workflows/python-app.yml)
 
 ## Website
 
-Check out the project website: [E-Paper Bot](https://sankethsj.github.io/epaper/)
+Access downloaded papers: [E-Paper Bot](https://sankethsj.github.io/epaper/)
 
----
+## Legal Notice
 
-## Installation and Usage
+This tool is for personal, non-commercial use only. All content rights belong to their respective owners:
 
-### Step 1: Clone the Repository
+- Kannada Prabha © Asianet News Media and Entertainment Pvt Ltd
+- Vishwavani © Vishwavani Daily
 
-Clone this repository to your local machine:
+## Setup and Usage
+
+### Installation
 
 ```bash
 git clone https://github.com/sankethsj/newspaper-bot.git
 cd newspaper-bot
-```
-
-### Step 2: Install Dependencies
-
-Ensure you have Python installed.
-Install the required dependencies using pip:
-
-```bash
 pip install -r requirements.txt
 ```
 
-### Step 3: Run the Flask Application
-
-Start the Flask application by running the following command:
+### Running Locally
 
 ```bash
 python app.py
 ```
 
-### Step 4: Access the Application
+Access the web interface at `http://localhost:5000`
 
-Once the Flask app is running, open your browser and navigate to:
+## Project Structure
 
-```arduino
-http://localhost:5000
+```plaintext
+paperbot/
+  ├── kannada_prabha.py  # Kannada Prabha download logic
+  ├── vishwavani.py      # Vishwavani download logic
+  └── utils.py           # Shared utilities
 ```
-
-You should now be able to use the E-Paper Bot to download the newspaper.
-
-## Disclaimer
-
-This project is intended solely for learning and educational purposes. It is not designed for monetization or commercial use. Please respect the rights of the original content owners and ensure that this tool is used in compliance with applicable laws.
 
 ## Contributing
 
-Contributions are welcome! If you'd like to contribute to this project, please fork the repository and create a pull request with your proposed changes. For major changes, please open an issue first to discuss what you'd like to improve.
+For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## Issues
-
-If you encounter any issues or have questions, please feel free to open an issue on GitHub, or post your queries in the discussion section. We're here to help!
-
-## Acknowledgements
-
-The official source of the newspaper: [Kannada Prabha](https://kpepaper.asianetnews.com/)
+[MIT](LICENSE)

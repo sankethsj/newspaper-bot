@@ -1,120 +1,111 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import datetime as dt
 import os
-import shutil
-from functools import partial
-from multiprocessing.dummy import Pool as ThreadPool
+from typing import Dict, Optional
 
-import requests
-from pypdf import PdfWriter
-
-
-def get_page_count(issue_id, date_string):
-    url = f"https://www.enewspapr.com/OutSourcingDataChanged.php?operation=getPageArticleDetails&selectedIssueId={issue_id}_{date_string}"
-    response = requests.get(url)
-    response.status_code
-    page_count = len(response.json())
-    return page_count
+from paperbot.utils import (
+    cleanup_old_files,
+    cleanup_temp_dir,
+    ensure_dirs_exist,
+    get_date_string,
+    get_india_time,
+    merge_pdfs,
+)
+from paperbot import kannada_prabha, vishwavani
 
 
-def download_pdf(issue_id, date_string, page_no):
+def process_paper(
+    name: str, date_string: str, download_func: callable, **kwargs
+) -> Optional[str]:
+    """Process (download and merge) a single paper.
 
-    issue = issue_id.split("_")[0]
-    region = issue_id.split("_")[1]
-    yyyy = date_string[:4]
-    mm = date_string[4:6]
-    dd = date_string[6:8]
-    page_no = str(page_no).zfill(2)
+    Args:
+        name: Paper name (used in output filename)
+        date_string: Date in YYYYMMDD format
+        download_func: Function to call to download paper
+        **kwargs: Additional arguments for download_func
 
-    page_url = f"https://www.enewspapr.com/News/{issue}/{region}/{yyyy}/{mm}/{dd}/{date_string}_{page_no}.PDF"
+    Returns:
+        str: Path to merged PDF if successful, None otherwise
+    """
+    ensure_dirs_exist("tmp", "output")
 
-    response = requests.get(page_url)
+    print(f"\nProcessing {name} for date {date_string}")
 
-    print(page_url, response.status_code)
+    try:
+        if not download_func(date_string, **kwargs):
+            print(f"Failed to download {name}")
+            return None
 
-    if response.status_code == 200:
-        filename = page_url.rsplit("/", 1)[-1]
-        with open("tmp/" + filename, "wb") as f:
-            f.write(response.content)
-    else:
-        print("Error :", response.text)
+        output_path = os.path.join("output", f"{name}_{date_string}.pdf")
+        if merge_pdfs("tmp", output_path):
+            return output_path
+
+    except Exception as e:
+        print(f"Error processing {name}: {e}")
+
+    finally:
+        cleanup_temp_dir()
+
+    return None
 
 
-def export_to_single_df(issue_id, date_string):
+def check_existing(date_string: str, paper_id: str) -> bool:
+    """Check if paper already exists for date."""
+    if not os.path.exists("output"):
+        return False
 
-    merger = PdfWriter()
-    file_found = False
-    for pdf in sorted(os.listdir("tmp")):
-        file_found = True
-        merger.append("tmp/" + pdf)
+    for file in os.listdir("output"):
+        if file.startswith(paper_id) and date_string in file:
+            print(f"Paper {paper_id} for date {date_string} already exists")
+            return True
+    return False
 
-    if not file_found:
-        merger.close()
-        print("E-paper not found")
-        return
 
-    out_filename = f"output/{issue_id}_{date_string}.pdf"
-    merger.write(out_filename)
-    merger.close()
-    print("E-paper saved :", out_filename)
+def process_all_papers() -> Dict[str, Optional[str]]:
+    """Process all configured papers for today's date.
+
+    Returns:
+        Dict mapping paper names to output paths (or None if failed)
+    """
+    current_time = get_india_time()
+    print("Current India time:", current_time)
+
+    date_string = get_date_string(current_time)
+    results = {}
+
+    # Kannada Prabha
+    paper_id = "KANPRABHA_MN"
+    if not check_existing(date_string, paper_id):
+        results[paper_id] = process_paper(
+            paper_id, date_string, kannada_prabha.download_paper, issue_id=paper_id
+        )
+
+    # Vishwavani (both editions if needed)
+    for edition in [2]:  # Add more editions if needed
+        paper_id = f"VISHWAVANI_{edition}"
+        if not check_existing(date_string, paper_id):
+            results[paper_id] = process_paper(
+                paper_id, date_string, vishwavani.download_paper, sub_edition=edition
+            )
+
+    return results
 
 
 if __name__ == "__main__":
+    ensure_dirs_exist("tmp", "output")
 
-    current_time = dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=5, minutes=30)
-    print("Current India time :", current_time)
+    results = process_all_papers()
 
-    date_string = dt.datetime.strftime(current_time, "%Y%m%d")
-    ISSUE_ID = "KANPRABHA_MN"
+    # Report results
+    print("\nProcessing complete:")
+    for paper, path in results.items():
+        if path:
+            print(f"✓ {paper}: {path}")
+        else:
+            print(f"✗ {paper}: Failed to process")
 
-    # check if paper already downloaded or exists
-    paper_exists = False
-    for file in os.listdir("output"):
-        file_date_str = file.split("_")[-1].split(".")[0]
-        if date_string == file_date_str:
-            print(f"Paper for date {date_string} already exists")
-            paper_exists = True
-            break
-
-    if not paper_exists:
-
-        print(f"Downloading '{ISSUE_ID}' of date : {date_string}")
-
-        page_count = get_page_count(ISSUE_ID, date_string)
-        print("No. of pages :", page_count)
-
-        os.makedirs("tmp", exist_ok=True)
-        os.makedirs("output", exist_ok=True)
-
-        pages = []
-        for i in range(1, page_count + 1):
-            pages.append(i)
-
-        print("Downloading all pages...")
-        # Make the Pool of workers
-        pool = ThreadPool(8)
-
-        func = partial(download_pdf, ISSUE_ID, date_string)
-        pool.map(func, pages)
-        pool.close()
-        pool.join()
-
-        print("Download complete")
-
-        export_to_single_df(ISSUE_ID, date_string)
-
-        print("Cleaning 'tmp' folder")
-        shutil.rmtree("tmp")
-        print("Complete")
-
-    # delete pdf files older than 7 days
-    for file in os.listdir("output"):
-
-        file_date_str = file.split("_")[-1].split(".")[0]
-        file_date = dt.datetime.strptime(file_date_str, "%Y%m%d")
-
-        if (current_time.replace(tzinfo=None) - file_date).days > 7:
-            print(f"Deleting File '{file}' older than 7 days")
-            os.remove("output/" + file)
+    # Cleanup old files
+    cleanup_old_files(days=7)
+    cleanup_temp_dir()
