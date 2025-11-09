@@ -1,3 +1,5 @@
+beautifulsoup4
 Flask
+img2pdf
 pypdf
 requests

@@ -6,6 +6,7 @@ import os
 import shutil
 from typing import Optional
 
+import img2pdf
 from pypdf import PdfWriter
 
 
@@ -22,10 +23,10 @@ def get_date_string(date: Optional[dt.datetime] = None, format: str = "%Y%m%d") 
 
 
 def merge_pdfs(tmp_dir: str, output_path: str) -> bool:
-    """Merge all PDFs in tmp_dir into a single PDF at output_path.
+    """Merge all PDFs or images in tmp_dir into a single PDF at output_path.
     
     Args:
-        tmp_dir: Directory containing PDF files to merge
+        tmp_dir: Directory containing PDF/JPG files to merge
         output_path: Path where merged PDF should be saved
     
     Returns:
@@ -35,31 +36,49 @@ def merge_pdfs(tmp_dir: str, output_path: str) -> bool:
         print("tmp_dir not found:", tmp_dir)
         return False
 
-    files = [f for f in os.listdir(tmp_dir) if f.lower().endswith('.pdf')]
-    if not files:
-        print("No PDF files found in tmp_dir")
-        return False
+    # Check for both PDF and JPG files
+    pdf_files = [f for f in os.listdir(tmp_dir) if f.lower().endswith('.pdf')]
+    jpg_files = [f for f in os.listdir(tmp_dir) if f.lower().endswith('.jpg')]
 
-    # Sort files to maintain page order
-    files = sorted(files)
-    
-    merger = PdfWriter()
-    file_found = False
-    
-    for pdf in files:
-        file_found = True
-        merger.append(os.path.join(tmp_dir, pdf))
-
-    if not file_found:
-        merger.close()
-        print("No PDFs found to merge")
-        return False
-
+    # Create output directory if it doesn't exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    merger.write(output_path)
-    merger.close()
-    print("E-paper saved:", output_path)
-    return True
+
+    if jpg_files:
+        # Handle image files using img2pdf
+        print("Found JPG files, converting to PDF...")
+        jpg_files = sorted(jpg_files)  # Sort to maintain page order
+        image_paths = [os.path.join(tmp_dir, f) for f in jpg_files]
+        
+        try:
+            with open(output_path, "wb") as f:
+                f.write(img2pdf.convert(image_paths))
+            print("E-paper saved:", output_path)
+            return True
+        except Exception as e:
+            print(f"Error converting images to PDF: {e}")
+            return False
+
+    elif pdf_files:
+        # Handle PDF files using PdfWriter
+        print("Found PDF files, merging...")
+        pdf_files = sorted(pdf_files)
+        merger = PdfWriter()
+        
+        try:
+            for pdf in pdf_files:
+                merger.append(os.path.join(tmp_dir, pdf))
+                
+            merger.write(output_path)
+            merger.close()
+            print("E-paper saved:", output_path)
+            return True
+        except Exception as e:
+            print(f"Error merging PDFs: {e}")
+            merger.close()
+            return False
+    else:
+        print("No PDF or JPG files found in tmp_dir")
+        return False
 
 
 def cleanup_old_files(output_dir: str = "output", days: int = 7) -> None:

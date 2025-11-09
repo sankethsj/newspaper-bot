@@ -4,6 +4,7 @@ A tool designed to automate downloading of Kannada e-papers from official source
 
 - [Kannada Prabha E-Paper](https://kpepaper.asianetnews.com/)
 - [Vishwavani E-Paper](https://epaper.vishwavani.news/)
+- [Hosa Digantha E-Paper](https://epaper.hosadigantha.com/)
 
 Features a simple web interface for accessing downloaded papers and automated daily downloads via GitHub Actions.
 
@@ -19,6 +20,7 @@ This tool is for personal, non-commercial use only. All content rights belong to
 
 - Kannada Prabha © Asianet News Media and Entertainment Pvt Ltd
 - Vishwavani © Vishwavani Daily
+- Hosa Digantha © Hosa Digantha
 
 ## Setup and Usage
 
@@ -44,7 +46,8 @@ Access the web interface at `http://localhost:5000`
 paperbot/
   ├── kannada_prabha.py  # Kannada Prabha download logic
   ├── vishwavani.py      # Vishwavani download logic
-  └── utils.py           # Shared utilities
+  ├── hosadigantha.py    # Hosa Digantha download logic
+  └── utils.py           # Shared utilities (PDF merging, date handling, etc.)
 ```
 
 ## Contributing
