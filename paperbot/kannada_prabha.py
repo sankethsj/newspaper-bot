@@ -63,12 +63,12 @@ def download_page(issue_id: str, date_string: str, page_no: int) -> Optional[str
     return None
 
 
-def download_paper(issue_id: str, date_string: str) -> bool:
+def download_paper(date_string: str, issue_id: str) -> bool:
     """Download all pages for given issue and date.
     
     Args:
-        issue_id: Paper issue ID (e.g., 'KANPRABHA_MN')
         date_string: Date in YYYYMMDD format
+        issue_id: Paper issue ID (e.g., 'KANPRABHA_MN')
     
     Returns:
         bool: True if any pages were downloaded successfully
