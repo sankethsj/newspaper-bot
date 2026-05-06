@@ -2,9 +2,10 @@
 # coding: utf-8
 
 import os
+from datetime import datetime
 from typing import Dict, Optional
 
-from datetime import datetime
+from paperbot import hosadigantha, kannada_prabha, prajavani, vishwavani
 from paperbot.utils import (
     cleanup_old_files,
     cleanup_temp_dir,
@@ -13,7 +14,6 @@ from paperbot.utils import (
     get_india_time,
     merge_pdfs,
 )
-from paperbot import kannada_prabha, vishwavani, hosadigantha
 
 
 def process_paper(
@@ -42,7 +42,7 @@ def process_paper(
         if "-" in date_string:
             # Convert DD-MMM-YYYY to YYYYMMDD format
             date_string = datetime.strptime(date_string, "%d-%b-%Y").strftime("%Y%m%d")
-        
+
         output_path = os.path.join("output", f"{name}_{date_string}.pdf")
         if merge_pdfs("tmp", output_path):
             return output_path
@@ -105,6 +105,16 @@ def process_all_papers() -> Dict[str, Optional[str]]:
             hd_date,
             hosadigantha.download_paper,
             edition="2",  # edition 2 for Mangaluru
+        )
+
+    # Prajavani
+    paper_id = "PRAJAVANI_BLR"
+    if not check_existing(date_string, paper_id):
+        results[paper_id] = process_paper(
+            paper_id,
+            date_string,
+            prajavani.download_paper,
+            edition="4",  # edition 2 for Mangaluru
         )
 
     return results
