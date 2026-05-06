@@ -124,5 +124,5 @@ if __name__ == "__main__":
             print(f"✗ {paper}: Failed to process")
 
     # Cleanup old files
-    cleanup_old_files(days=7)
+    cleanup_old_files(days=3)
     cleanup_temp_dir()
