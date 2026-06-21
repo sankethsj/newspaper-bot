@@ -95,27 +95,27 @@ def process_all_papers() -> Dict[str, Optional[str]]:
                 paper_id, date_string, vishwavani.download_paper, sub_edition=edition
             )
 
-    # Hosa Digantha
-    paper_id = "HOSADIGANTHA_MN"
-    if not check_existing(date_string, paper_id):
-        # Convert YYYYMMDD to DD-MMM-YYYY format for Hosa Digantha
-        hd_date = datetime.strptime(date_string, "%Y%m%d").strftime("%d-%b-%Y")
-        results[paper_id] = process_paper(
-            paper_id,
-            hd_date,
-            hosadigantha.download_paper,
-            edition="2",  # edition 2 for Mangaluru
-        )
+    # # Hosa Digantha
+    # paper_id = "HOSADIGANTHA_MN"
+    # if not check_existing(date_string, paper_id):
+    #     # Convert YYYYMMDD to DD-MMM-YYYY format for Hosa Digantha
+    #     hd_date = datetime.strptime(date_string, "%Y%m%d").strftime("%d-%b-%Y")
+    #     results[paper_id] = process_paper(
+    #         paper_id,
+    #         hd_date,
+    #         hosadigantha.download_paper,
+    #         edition="2",  # edition 2 for Mangaluru
+    #     )
 
-    # Prajavani
-    paper_id = "PRAJAVANI_BLR"
-    if not check_existing(date_string, paper_id):
-        results[paper_id] = process_paper(
-            paper_id,
-            date_string,
-            prajavani.download_paper,
-            edition="4",  # edition 2 for Mangaluru
-        )
+    # # Prajavani
+    # paper_id = "PRAJAVANI_BLR"
+    # if not check_existing(date_string, paper_id):
+    #     results[paper_id] = process_paper(
+    #         paper_id,
+    #         date_string,
+    #         prajavani.download_paper,
+    #         edition="4",  # edition 2 for Mangaluru
+    #     )
 
     return results
 
