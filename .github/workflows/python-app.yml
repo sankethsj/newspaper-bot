@@ -6,8 +6,9 @@ name: E-paper bot
 on:
   #workflow_dispatch
   schedule:
-    - cron:  "30 23 * * *"
-    # runs at 23:30 UTC -> 4.30 AM IST
+    - cron:  "00 21 * * *"
+    # runs at 21:00 UTC -> 2.30 AM IST
+    # adjusted for runner delay of 2-2.5 hours
   
 
 permissions:
